@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1" # Should we use this region
+  region = "us-east-1" # Adjust to your preferred region
 }
 
 # Fetch AWS Organization
@@ -12,15 +12,12 @@ data "aws_organizations_organizational_units" "all_ous" {
 
 # Filter the OU by name and handle potential errors
 locals {
-  matching_ous = [
-    for ou in data.aws_organizations_organizational_units.all_ous.children : 
+  target_ou = [
+    for ou in data.aws_organizations_organizational_units.all_ous.organizational_units : 
     ou.id if ou.name == "labs-org-dev"
   ]
   
-  ou_id = length(local.matching_ous) > 0 ? local.matching_ous[0] : null
-  
-  # Validation check
-  validate_ou = (local.ou_id != null) ? null : file("ERROR: labs-org-dev not found")
+  ou_id = length(local.target_ou) > 0 ? local.target_ou[0] : null
 }
 
 resource "aws_organizations_policy" "deny_networking_features" {
@@ -45,7 +42,6 @@ resource "aws_organizations_policy" "deny_networking_features" {
           "ec2:CreateNetworkAcl",
           "ec2:CreateNetworkInterface",
           "ec2:CreateCustomerGateway",
-          # Additional commonly restricted networking actions
           "ec2:CreateVpcPeeringConnection",
           "ec2:AcceptVpcPeeringConnection",
           "ec2:CreateTransitGatewayVpcAttachment",
@@ -61,6 +57,8 @@ resource "aws_organizations_policy" "deny_networking_features" {
 }
 
 resource "aws_organizations_policy_attachment" "attach_policy" {
+  count = local.ou_id != null ? 1 : 0
+  
   policy_id = aws_organizations_policy.deny_networking_features.id
   target_id = local.ou_id
 }
@@ -76,4 +74,15 @@ output "policy_id" {
 
 output "policy_arn" {
   value = aws_organizations_policy.deny_networking_features.arn
+}
+
+output "target_ou_found" {
+  value = local.ou_id != null
+  description = "Whether the target OU was found"
+}
+
+# Debug output to verify OU names
+output "debug_all_ous" {
+  value = data.aws_organizations_organizational_units.all_ous.organizational_units[*].name
+  description = "List of all OU names for verification"
 }
