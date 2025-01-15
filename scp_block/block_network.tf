@@ -12,15 +12,18 @@ data "aws_organizations_organizational_units" "all_ous" {
 
 # Filter the OU by name and handle potential errors
 locals {
-  target_ou = [
-    for ou in data.aws_organizations_organizational_units.all_ous.organizational_units : 
-    ou.id if ou.name == "labs-org-dev"
+    allowed_roles = [
+    "cl/app/crossaccount/cloudopspipeline/cloudops-pipeline-role",
+    "cl/app/crossaccount/cloudopspipeline/cloudops-pipeline-svc-role",
+    # "cloudops-pipeline-task-role",
+    # "network-prod-jenkins-terraform-deployment",
+    "cl/app/crossaccount/cloudopspipeline/cloudops-pipeline-role",
+    "OrganizationAccountAccessRole"
   ]
-  
-  ou_id = length(local.target_ou) > 0 ? local.target_ou[0] : null
+  root_id = data.aws_organizations_organization.existing.roots[0].id
 }
 
-resource "aws_organizations_policy" "deny_networking_features" {
+resource "aws_organizations_policy" "deny_networking_features_with_exceptions" {
   name        = "DenyNetworkingFeatures"
   description = "Prevents creation of networking features like VPCs, subnets, gateways, etc."
   
@@ -51,38 +54,47 @@ resource "aws_organizations_policy" "deny_networking_features" {
           "ec2:AttachVpnGateway"
         ]
         Resource = ["*"]
+        Condition = {
+          StringNotLike = {
+            "aws:PrincipalArn": concat(
+              [for role in local.allowed_roles :
+                "arn:aws:iam::*:role/${role}"
+              ],
+              # Optionally allow specific users as well
+              # ["arn:aws:iam::*:user/NetworkAdmin"]
+            )
+          }
+        }
       }
     ]
   })
 }
 
 resource "aws_organizations_policy_attachment" "attach_policy" {
-  count = local.ou_id != null ? 1 : 0
-  
-  policy_id = aws_organizations_policy.deny_networking_features.id
-  target_id = local.ou_id
+  policy_id = aws_organizations_policy.deny_networking_features_with_exceptions.id
+  target_id = local.root_id
 }
 
 # Outputs
 output "selected_ou_id" {
-  value = local.ou_id
+  value = local.root_id
 }
 
 output "policy_id" {
-  value = aws_organizations_policy.deny_networking_features.id
+  value = aws_organizations_policy.deny_networking_features_with_exceptions.id
 }
 
 output "policy_arn" {
-  value = aws_organizations_policy.deny_networking_features.arn
+  value = aws_organizations_policy.deny_networking_features_with_exceptions.arn
 }
 
 output "target_ou_found" {
-  value = local.ou_id != null
+  value = local.root_id != null
   description = "Whether the target OU was found"
 }
 
 # Debug output to verify OU names
 output "debug_all_ous" {
-  value = data.aws_organizations_organizational_units.all_ous.organizational_units[*].name
+  value = data.aws_organizations_organizational_units.all_ous.children[*].name
   description = "List of all OU names for verification"
 }
