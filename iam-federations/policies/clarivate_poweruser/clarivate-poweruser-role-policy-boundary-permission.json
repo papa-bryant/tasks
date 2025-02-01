@@ -1,0 +1,221 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "NotAction": [
+        "iam:*",
+        "account:*",
+        "savingsplans:*",
+        "ce:*",
+        "ds:*",
+        "cognito-idp:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:Get*",
+        "iam:List*",
+        "iam:SimulatePrincipalPolicy",
+        "iam:SimulateCustomPolicy",
+        "iam:GenerateServiceLastAccessedDetails",
+        "iam:GenerateCredentialReport",
+        "account:ListRegions",
+        "ds:CreateComputer",
+        "ds:DescribeDirectories",
+        "cognito-idp:Describe*",
+        "cognito-idp:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowBoundedPolicyManagement",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreatePolicy*",
+        "iam:DeletePolicy*",
+        "iam:SetDefaultPolicyVersion",
+        "iam:TagPolicy",
+        "iam:UntagPolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:policy/cl/bound/*"
+      ]
+    },
+    {
+      "Sid": "AllowBoundedRoleManagement",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:PutRolePermissionsBoundary",
+        "iam:PutRolePolicy",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRolePolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/bound/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PermissionsBoundary": "arn:aws:iam::${account_id}:policy/cl/sso/poweruser/clarivate-poweruser-role-policy-boundary-permission"
+        }
+      }
+    },
+    {
+      "Sid": "AllowRoleManagement",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:UpdateRoleDescription",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:AddRoleToInstanceProfile",
+        "iam:TagRole",
+        "iam:UntagRole",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRole",
+        "iam:CreateInstanceProfile",
+        "iam:TagInstanceProfile",
+        "iam:UntagInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:DeleteInstanceProfile"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/custom/*",
+        "arn:aws:iam::${account_id}:role/cl/app/*",
+        "arn:aws:iam::${account_id}:role/cl/bound/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/custom/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/app/*"
+      ]
+    },
+    {
+      "Sid": "AllowAttachPolicy",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AttachRolePolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/custom/*",
+        "arn:aws:iam::${account_id}:role/cl/app/*"
+      ],
+      "Condition": {
+        "ArnLike": {
+          "iam:PolicyArn": [
+            "arn:aws:iam::${account_id}:policy/cl/svc/dc/*",
+            "arn:aws:iam::${account_id}:policy/cl/svc/aws/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/readonly/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/poweruser/*",
+            "arn:aws:iam::${account_id}:policy/cl/custom/*",
+            "arn:aws:iam::${account_id}:policy/cl/app/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowIamTag",
+      "Effect": "Allow",
+      "Action": [
+        "iam:TagMFADevice",
+        "iam:UntagMFADevice",
+        "iam:TagSAMLProvider",
+        "iam:UntagSAMLProvider",
+        "iam:TagServerCertificate",
+        "iam:UntagServerCertificate",
+        "iam:TagOpenIDConnectProvider",
+        "iam:UntagOpenIDConnectProvider",
+        "iam:TagUser",
+        "iam:UntagUser"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Sid": "AllowPassRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/svc/dc/*",
+        "arn:aws:iam::${account_id}:role/cl/svc/aws/*",
+        "arn:aws:iam::${account_id}:role/cl/sso/readonly/*",
+        "arn:aws:iam::${account_id}:role/cl/sso/poweruser/*",
+        "arn:aws:iam::${account_id}:role/cl/custom/*",
+        "arn:aws:iam::${account_id}:role/cl/app/*",
+        "arn:aws:iam::${account_id}:role/cl/bound/*"
+      ]
+    },
+    {
+      "Sid": "AllowCrossAccountPassRole",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::*:role/cl/bound/*"
+    },
+    {
+      "Sid": "DenyEc2",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:ReplaceRouteTableAssociation",
+        "ec2:ReplaceRoute",
+        "ec2:ReplaceNetworkAclEntry",
+        "ec2:ReplaceNetworkAclAssociation",
+        "ec2:RejectVpcPeeringConnection",
+        "ec2:ModifyVpcPeeringConnectionOptions",
+        "ec2:ModifyVpcEndpoint",
+        "ec2:ModifyVpcAttribute",
+        "ec2:EnableVpcClassicLinkDnsSupport",
+        "ec2:EnableVpcClassicLink",
+        "ec2:EnableVgwRoutePropagation",
+        "ec2:DisassociateVpcCidrBlock",
+        "ec2:DisassociateRouteTable",
+        "ec2:DisableVpcClassicLinkDnsSupport",
+        "ec2:DisableVpcClassicLink",
+        "ec2:DisableVgwRoutePropagation",
+        "ec2:DetachVpnGateway",
+        "ec2:DetachInternetGateway",
+        "ec2:DetachClassicLinkVpc",
+        "ec2:DeleteVpnGateway",
+        "ec2:DeleteVpnConnectionRoute",
+        "ec2:DeleteVpnConnection",
+        "ec2:DeleteVpcPeeringConnection",
+        "ec2:DeleteVpcEndpoints",
+        "ec2:DeleteVpc",
+        "ec2:DeleteRouteTable",
+        "ec2:DeleteRoute",
+        "ec2:DeleteNetworkAclEntry",
+        "ec2:DeleteNetworkAcl",
+        "ec2:DeleteNatGateway",
+        "ec2:DeleteInternetGateway",
+        "ec2:DeleteFlowLogs",
+        "ec2:DeleteEgressOnlyInternetGateway",
+        "ec2:DeleteCustomerGateway",
+        "ec2:CreateVpnGateway",
+        "ec2:CreateVpnConnectionRoute",
+        "ec2:CreateVpnConnection",
+        "ec2:CreateVpcPeeringConnection",
+        "ec2:CreateVpcEndpoint",
+        "ec2:CreateVpc",
+        "ec2:CreateRouteTable",
+        "ec2:CreateRoute",
+        "ec2:CreateNetworkAclEntry",
+        "ec2:CreateNetworkAcl",
+        "ec2:CreateNatGateway",
+        "ec2:CreateInternetGateway",
+        "ec2:CreateFlowLogs",
+        "ec2:CreateEgressOnlyInternetGateway",
+        "ec2:CreateDefaultVpc",
+        "ec2:CreateCustomerGateway",
+        "ec2:AttachVpnGateway",
+        "ec2:AttachInternetGateway",
+        "ec2:AttachClassicLinkVpc",
+        "ec2:AssociateVpcCidrBlock",
+        "ec2:AssociateRouteTable",
+        "ec2:AcceptVpcPeeringConnection"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

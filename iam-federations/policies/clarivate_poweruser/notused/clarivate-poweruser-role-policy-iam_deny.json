@@ -1,0 +1,101 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "poweruserDeny",
+      "Effect": "Deny",
+      "Action": [
+        "iam:UpdateSAMLProvider",
+        "iam:UpdateOpenIDConnect*",
+        "iam:DeleteSAMLProvider",
+        "iam:DeleteOpenIDConnect",
+        "iam:DeleteAccountPassword",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:ReplaceRouteTableAssociation",
+        "ec2:ReplaceRoute",
+        "ec2:ReplaceNetworkAclEntry",
+        "ec2:ReplaceNetworkAclAssociation",
+        "ec2:RejectVpcPeeringConnection",
+        "ec2:ModifyVpcPeeringConnectionOptions",
+        "ec2:ModifyVpcEndpoint",
+        "ec2:ModifyVpcAttribute",
+        "ec2:GetAccountAuthorizationDetails",
+        "ec2:EnableVpcClassicLinkDnsSupport",
+        "ec2:EnableVpcClassicLink",
+        "ec2:EnableVgwRoutePropagation",
+        "ec2:DisassociateVpcCidrBlock",
+        "ec2:DisassociateRouteTable",
+        "ec2:DisableVpcClassicLinkDnsSupport",
+        "ec2:DisableVpcClassicLink",
+        "ec2:DisableVgwRoutePropagation",
+        "ec2:DetachVpnGateway",
+        "ec2:DetachInternetGateway",
+        "ec2:DetachClassicLinkVpc",
+        "ec2:DeleteVpnGateway",
+        "ec2:DeleteVpnConnectionRoute",
+        "ec2:DeleteVpnConnection",
+        "ec2:DeleteVpcPeeringConnection",
+        "ec2:DeleteVpcEndpoints",
+        "ec2:DeleteVpc",
+        "ec2:DeleteSecurityGroup",
+        "ec2:DeleteRouteTable",
+        "ec2:DeleteRoute",
+        "ec2:DeleteNetworkAclEntry",
+        "ec2:DeleteNetworkAcl",
+        "ec2:DeleteNatGateway",
+        "ec2:DeleteInternetGateway",
+        "ec2:DeleteFlowLogs",
+        "ec2:DeleteEgressOnlyInternetGateway",
+        "ec2:DeleteCustomerGateway",
+        "ec2:CreateVpnGateway",
+        "ec2:CreateVpnConnectionRoute",
+        "ec2:CreateVpnConnection",
+        "ec2:CreateVpcPeeringConnection",
+        "ec2:CreateVpcEndpoint",
+        "ec2:CreateVpc",
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateRouteTable",
+        "ec2:CreateRoute",
+        "ec2:CreateNetworkAclEntry",
+        "ec2:CreateNetworkAcl",
+        "ec2:CreateNatGateway",
+        "ec2:CreateInternetGateway",
+        "ec2:CreateFlowLogs",
+        "ec2:CreateEgressOnlyInternetGateway",
+        "ec2:CreateDefaultVpc",
+        "ec2:CreateCustomerGateway",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:AttachVpnGateway",
+        "ec2:AttachInternetGateway",
+        "ec2:AttachClassicLinkVpc",
+        "ec2:AssociateVpcCidrBlock",
+        "ec2:AssociateRouteTable",
+        "ec2:AcceptVpcPeeringConnection"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "poweruserDenyIamAttachNonClarivate",
+      "Effect": "Deny",
+      "Action": [
+        "iam:Detach*",
+        "iam:Attach*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "iam:PolicyArn": [
+            "arn:aws:iam::${account_id}:policy/cl/svc/dc/*",
+            "arn:aws:iam::${account_id}:policy/cl/svc/aws/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/readonly/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/poweruser/*",
+            "arn:aws:iam::${account_id}:policy/cl/custom/*",
+            "arn:aws:iam::${account_id}:policy/cl/app/*"
+          ]
+        }
+      }
+    }
+  ]
+}

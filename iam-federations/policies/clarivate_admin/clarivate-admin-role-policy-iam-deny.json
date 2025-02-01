@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "adminDenyIamProvider",
+      "Effect": "Deny",
+      "Action": [
+        "sts:assume*",
+        "iam:UpdateSAMLProvider",
+        "iam:UpdateOpenIDConnect*",
+        "iam:DeleteSAMLProvider",
+        "iam:DeleteOpenIDConnect",
+        "iam:DeleteAccountPassword"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "adminDenyIamAttachNonClarivate",
+      "Effect": "Deny",
+      "Action": [
+        "iam:Detach*",
+        "iam:Attach*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "iam:PolicyArn": [
+            "arn:aws:iam::${account_id}:policy/cl/svc/dc/*",
+            "arn:aws:iam::${account_id}:policy/cl/svc/aws/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/readonly/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/poweruser/*",
+            "arn:aws:iam::${account_id}:policy/cl/sso/admin/*",
+            "arn:aws:iam::${account_id}:policy/cl/custom/*",
+            "arn:aws:iam::${account_id}:policy/cl/app/*",
+            "arn:aws:iam::${account_id}:policy/cl/admin/*"
+          ]
+        }
+      }
+    }
+  ]
+}

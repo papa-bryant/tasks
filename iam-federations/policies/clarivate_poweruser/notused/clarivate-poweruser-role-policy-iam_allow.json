@@ -1,0 +1,53 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "poweruserAllowIpRestricted",
+      "Effect": "Allow",
+      "Action": [
+        "iam:List*",
+        "iam:Get*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "poweruserAllowIamIpRestrictedClarivate",
+      "Effect": "Allow",
+      "Action": [
+        "iam:UpdateAssumeRolePolicy",
+        "iam:SimulatePrincipalPolicy",
+        "iam:SimulateCustomPolicy",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRole",
+        "iam:DeleteInstanceProfile",
+        "iam:CreateRole",
+        "iam:CreateInstanceProfile",
+        "iam:AttachRolePolicy",
+        "iam:UntagSAMLProvider",
+        "iam:UntagRole",
+        "iam:TagRole",
+        "iam:TagMFADevice",
+        "iam:TagSAMLProvider",
+        "iam:UntagServerCertificate",
+        "iam:TagPolicy",
+        "iam:TagUser",
+        "iam:UntagUser",
+        "iam:UntagMFADevice",
+        "iam:TagServerCertificate",
+        "iam:UntagPolicy",
+        "iam:UntagOpenIDConnectProvider",
+        "iam:UntagInstanceProfile",
+        "iam:TagOpenIDConnectProvider",
+        "iam:TagInstanceProfile",
+        "iam:UpdateRoleDescription"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/custom/*",
+        "arn:aws:iam::${account_id}:role/cl/app/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/custom/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/app/*"
+      ]
+    }
+  ]
+}

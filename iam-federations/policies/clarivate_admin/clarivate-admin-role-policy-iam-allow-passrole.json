@@ -1,0 +1,39 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "adminPassRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "iam:AddRoleToInstanceProfile"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/cl/svc/dc/*",
+        "arn:aws:iam::${account_id}:role/cl/svc/aws/*",
+        "arn:aws:iam::${account_id}:role/cl/sso/readonly/*",
+        "arn:aws:iam::${account_id}:role/cl/sso/poweruser/*",
+        "arn:aws:iam::${account_id}:role/cl/sso/admin/*",
+        "arn:aws:iam::${account_id}:role/cl/custom/*",
+        "arn:aws:iam::${account_id}:role/cl/app/*",
+        "arn:aws:iam::${account_id}:role/cl/admin/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/custom/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/app/*",
+        "arn:aws:iam::${account_id}:instance-profile/cl/admin/*"
+      ]
+    },
+    {
+      "Sid": "adminPassRoleCompat",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "iam:AddRoleToInstanceProfile"
+      ],
+      "Resource": [
+        "arn:aws:iam::${account_id}:role/workflow-platform-lambda",
+        "arn:aws:iam::${account_id}:role/service-role/StatesExecutionRole-us-west-2",
+        "arn:aws:iam::${account_id}:role/cl_servicerole_cloudformation_power"
+      ]
+    }
+  ]
+}
