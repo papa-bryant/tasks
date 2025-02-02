@@ -122,6 +122,75 @@ aws cloudtrail create-trail \
 
 1. Implementation:
    - Create SSO permission sets
+   
+   SuperAdmin
+   `arn:aws:iam::aws:policy/AdministratorAccess`
+   ```
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+        }
+    ]
+   }
+   ```
+
+   PowerUserAccess
+   `arn:aws:iam::aws:policy/PowerUserAccess`
+   ```
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "NotAction": [
+                "iam:*",
+                "organizations:*",
+                "account:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "account:GetAccountInformation",
+                "account:GetPrimaryEmail",
+                "account:ListRegions",
+                "iam:CreateServiceLinkedRole",
+                "iam:DeleteServiceLinkedRole",
+                "iam:ListRoles",
+                "organizations:DescribeOrganization"
+            ],
+            "Resource": "*"
+        }
+      ]
+   }
+   ```
+
+   Admin custom policy
+   ```
+   {
+      "Version": "2012-10-17",
+      "Statement": [
+         {
+            "Effect": "Allow",
+            "NotAction": [
+            "iam:*",
+            "organizations:*",
+            "account:*",
+            "billing:*"
+            ],
+            "Resource": "*"
+         }
+      ]
+   }
+```
+N/B 
+The readonly user already has the AWS managed readonly role so we won't need to update that one. These are the base permissions and can be applied in addition to what already exists.
+
    - Attach managed policies
    - Configure CloudTrail
 
