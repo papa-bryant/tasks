@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "superadmin-attach2" {
   policy_arn = aws_iam_policy.clarivate-superadmin-policy-ri-deny.arn
   depends_on = [aws_iam_role.clarivate_superadmin, aws_iam_policy.clarivate-superadmin-policy-ri-deny]
 }
-
+# Adding the Administrator aws managed policy arn below
 resource "aws_iam_role_policy_attachment" "superadmin-attach3" {
   role       = "clarivate_superadmin"
   policy_arn = data.aws_iam_policy.AdministratorAccess.arn
@@ -185,7 +185,7 @@ resource "aws_iam_role_policy_attachment" "poweruser-managed-attach5" {
   policy_arn = data.aws_iam_policy.AwsGlueDataBrewFullAccessPolicy.arn
   depends_on = [aws_iam_role.clarivate_poweruser]
 }
-
+# Adding the poweruser access role here
 resource "aws_iam_role_policy_attachment" "poweruser-managed-attach6" {
   role       = "clarivate_poweruser"
   policy_arn = data.aws_iam_policy.PowerUserAccess.arn
@@ -224,6 +224,7 @@ resource "aws_iam_policy" "clarivate-admin-role-policy-not-iam" {
   policy      = templatefile("${path.module}/policies/clarivate_admin/clarivate-admin-role-policy-not-iam.json", { account_id = local.account_id })
 }
 
+# Added new policy to exclude admin from accessing billing and organizations
 resource "aws_iam_policy" "clarivate-admin-role-policy-exclude" {
   name        = "clarivate-admin-role-policy-exclude"
   description = "Policy for admins"
@@ -275,6 +276,7 @@ resource "aws_iam_role_policy_attachment" "admin-attach4" {
   depends_on = [aws_iam_role.clarivate_admin, aws_iam_policy.clarivate-admin-role-policy-iam-allow]
 }
 
+# Attach admin exclude policy to the admin role
 resource "aws_iam_role_policy_attachment" "admin-attach5" {
   role       = "clarivate_admin"
   policy_arn = aws_iam_policy.clarivate-admin-role-policy-exclude.arn
