@@ -1,0 +1,18 @@
+{
+  "aws_iam_policy.clarivate-superadmin-policy-ri-deny": "arn:aws:iam::{}:policy/cl/sso/superadmin/clarivate-superadmin-policy-ri-deny",
+  "aws_iam_policy.clarivate-superadmin-role-policy": "arn:aws:iam::{}:policy/cl/sso/superadmin/clarivate-superadmin-role-policy",
+  "aws_iam_policy.clarivate-admin-role-policy-iam-allow-passrole": "arn:aws:iam::{}:policy/cl/sso/admin/clarivate-admin-role-policy-iam-allow-passrole",
+  "aws_iam_policy.clarivate-admin-role-policy-iam-allow": "arn:aws:iam::{}:policy/cl/sso/admin/clarivate-admin-role-policy-iam-allow",
+  "aws_iam_policy.clarivate-admin-role-policy-iam-deny": "arn:aws:iam::{}:policy/cl/sso/admin/clarivate-admin-role-policy-iam-deny",
+  "aws_iam_policy.clarivate-admin-role-policy-not-iam": "arn:aws:iam::{}:policy/cl/sso/admin/clarivate-admin-role-policy-not-iam",
+  "aws_iam_policy.clarivate-readonly-role-policy-iam_allow_n-z": "arn:aws:iam::{}:policy/cl/sso/readonly/clarivate-readonly-role-policy-iam_allow_n-z",
+  "aws_iam_policy.clarivate-readonly-role-policy-iam_allow_a-m": "arn:aws:iam::{}:policy/cl/sso/readonly/clarivate-readonly-role-policy-iam_allow_a-m",
+  "aws_iam_policy.clarivate-readonly-role-policy-iam_deny": "arn:aws:iam::{}:policy/cl/sso/readonly/clarivate-readonly-role-policy-iam_deny",
+  "aws_iam_policy.clarivate-poweruser-role-policy-boundary-permission": "arn:aws:iam::{}:policy/cl/sso/poweruser/clarivate-poweruser-role-policy-boundary-permission",
+  "aws_iam_policy.clarivate-poweruser-role-policy-deny-sg": "arn:aws:iam::{}:policy/cl/sso/poweruser/clarivate-poweruser-role-policy-deny-sg",
+  "aws_iam_policy.clarivate-poweruser-role-policy-sts_deny": "arn:aws:iam::{}:policy/cl/sso/poweruser/clarivate-poweruser-role-policy-sts_deny",
+  "aws_iam_role.OrganizationAccountAccessRole": "OrganizationAccountAccessRole",
+  "aws_iam_role.org_readonly": "clarivate_org_readonly",
+  "aws_iam_role_policy_attachment.administrator_access": "OrganizationAccountAccessRole/arn:aws:iam::aws:policy/AdministratorAccess",
+  "aws_iam_role_policy_attachment.readonly_access_policy": "clarivate_org_readonly/arn:aws:iam::aws:policy/ReadOnlyAccess"
+}

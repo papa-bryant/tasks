@@ -1,0 +1,7 @@
+.idea/
+**/*.tfstate
+**/*.tfstate.backup
+**/.terraform
+**/*.pyc
+.terraform.lock.hcl
+*.zip
