@@ -152,3 +152,18 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "clarivate-admin-role
   }
   permission_set_arn = aws_ssoadmin_permission_set.admin.arn
 }
+
+### clarivate-admin-role-policy-boundary-permission
+data "aws_iam_policy" "clarivate-admin-role-policy-boundary-permission" {
+  provider = aws.clarivate-identity-prod
+  name     = "clarivate-admin-role-policy-boundary-permission"
+}
+resource "aws_ssoadmin_customer_managed_policy_attachment" "clarivate-admin-role-policy-boundary-permission" {
+  provider     = aws.clarivate-identity-prod
+  instance_arn = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
+  customer_managed_policy_reference {
+    name = data.aws_iam_policy.clarivate-admin-role-policy-boundary-permission.name
+    path = "/cl/sso/admin/"
+  }
+  permission_set_arn = aws_ssoadmin_permission_set.admin.arn
+}

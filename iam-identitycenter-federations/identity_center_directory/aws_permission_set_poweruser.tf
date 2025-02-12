@@ -18,6 +18,18 @@ resource "aws_ssoadmin_permission_set" "poweruser" {
 ############################
 ### AWS Managed Policies ###
 ############################
+### PowerUserAccess AWS Managed
+data "aws_iam_policy" "poweruser_managed_access" {
+  arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+}
+
+resource "aws_ssoadmin_managed_policy_attachment" "poweruser_managed_access" {
+  provider           = aws.clarivate-identity-prod
+  instance_arn       = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
+  managed_policy_arn = data.aws_iam_policy.poweruser_managed_access.arn
+  permission_set_arn = aws_ssoadmin_permission_set.poweruser.arn
+}
+
 ### Redshift Data Full access
 data "aws_iam_policy" "redshift_data_full_access_poweruser" {
   provider = aws.clarivate-identity-prod

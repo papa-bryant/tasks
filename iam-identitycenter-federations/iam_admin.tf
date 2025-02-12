@@ -57,7 +57,7 @@ resource "aws_iam_policy" "clarivate-admin-role-policy-not-iam" {
   }
 }
 
-### clarivate-admin-role-policy-boundary-permission
+### clarivate-admin-role-policy-exclude
 resource "aws_iam_policy" "clarivate-admin-role-boundary-permission" {
   name        = "clarivate-admin-role-policy-boundary-permission"
   description = "Policy for admins"
